@@ -4,14 +4,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const passport = require('passport');
+const bodyParser = require('body-parser');
 
-// Here we use destructuring assignment with renaming so the two variables
-// called router (from ./users and ./auth) have different names
-// For example:
-// const actorSurnames = { james: "Stewart", robert: "De Niro" };
-// const { james: jimmy, robert: bobby } = actorSurnames;
-// console.log(jimmy); // Stewart - the variable name is jimmy, not james
-// console.log(bobby); // De Niro - the variable name is bobby, not robert
 const { router: usersRouter } = require('./users');
 const { router: authRouter, localStrategy, jwtStrategy } = require('./auth');
 
@@ -19,7 +13,12 @@ mongoose.Promise = global.Promise;
 
 const { PORT, DATABASE_URL } = require('./config');
 
+const policiesRouter = require('./routes/api/policies');
+
 const app = express();
+
+// Bodyparser Middleware
+app.use(bodyParser.json());
 
 // Logging
 app.use(morgan('common'));
@@ -40,6 +39,7 @@ passport.use(jwtStrategy);
 
 app.use('/api/users/', usersRouter);
 app.use('/api/auth/', authRouter);
+app.use('/api/policies', policiesRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
@@ -50,9 +50,6 @@ app.get('/api/protected', jwtAuth, (req, res) => {
   });
 });
 
-app.use('*', (req, res) => {
-  return res.status(404).json({ message: 'Not Found' });
-});
 
 // Referenced by both runServer and closeServer. closeServer
 // assumes runServer has run and set `server` to a server object
