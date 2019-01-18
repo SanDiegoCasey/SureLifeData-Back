@@ -47,10 +47,18 @@ console.log(req.body);
           error: err
         })
       });
-
-    // newPolicy.save()
-    //   .then(policy => res.json(policy));
 });
+
+// @route   DELETE api/policies
+// @descr   DELETE a policy
+// @access  Public (temporary in dev)
+
+router.delete('/:id', (req, res) => {
+    Policy.findById(req.params.id)
+      .then(policy => policy.remove().then(() => res.json({success : true})))
+      .catch(err => res.status(404).json({success: false}))
+
+    });
 
 
 module.exports = router;
