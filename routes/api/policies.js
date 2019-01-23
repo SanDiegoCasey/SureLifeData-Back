@@ -36,7 +36,8 @@ console.log(req.body);
       typeofins: req.body.typeofins,
       policynum: req.body.policynum,
       contactnum: req.body.contactnum,
-      userID: req.body.userID
+      userID: req.body.userID,
+      dollarvalue: req.body.dollarvalue
     })
     .then(policy => {
       res.status(201).json(policy);

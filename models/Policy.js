@@ -19,6 +19,10 @@ const PolicySchema = new Schema({
     type: String,
     required: true
   },
+  dollarvalue: {
+    type: String,
+    required: true
+  },
   date: {
     type: Date,
     default: Date.now
