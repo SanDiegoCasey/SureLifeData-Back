@@ -11,7 +11,7 @@ const Policy = require('../../models/Policy');
 router.get('/', (req, res) => {
     Policy.find()
     .sort({ date: -1})
-    .then(policies => res.json())
+    .then(policies => res.json(policies))
 });
 
 // @route   POST api/policies

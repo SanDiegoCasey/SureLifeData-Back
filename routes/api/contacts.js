@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-//Policy model
+//Contact model
 const Contact = require('../../models/Contact');
 
 // @route   GET api/contacts
@@ -11,7 +11,7 @@ const Contact = require('../../models/Contact');
 router.get('/', (req, res) => {
     Contact.find()
     .sort({ date: -1})
-    .then(contacts => res.json())
+    .then(contacts => res.json(contacts))
 });
 
 // @route   POST api/contact
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
 // @access  Public (temporary in dev)
 
 router.post('/', (req, res) => {
-  const requiredFields = ['name'];
+  const requiredFields = ['email', 'name'];
   console.log(`from router ${req.body}`);
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -33,10 +33,11 @@ router.post('/', (req, res) => {
 console.log(req.body);
     Contact.create({
       name: req.body.name,
+      email: req.body.email,
       img: req.body.img
     })
     .then(contact => {
-      res.status(201).json(policy);
+      res.status(201).json(contact);
     })
       .catch(err => {
         console.log(err);
