@@ -13,7 +13,7 @@ const ContactSchema = new Schema({
   },
   img: {
     type: String,
-    required: true
+    required: false
   },
   userID: String
 });
