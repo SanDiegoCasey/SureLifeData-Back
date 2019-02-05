@@ -3,13 +3,18 @@ const Schema = mongoose.Schema;
 
 //Create Schema
 const ContactSchema = new Schema({
-  name: {
+  firstname: {
     type: String,
     required: true
   },
-  email: {
+  lastname: {
     type: String,
     required: true
+  },
+  username: {
+    type: String,
+    required: false,
+    unique: true
   },
   img: {
     type: String,

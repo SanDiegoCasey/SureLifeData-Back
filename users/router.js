@@ -10,12 +10,13 @@ const jsonParser = bodyParser.json();
 
 // Post to register a new user
 router.post('/', jsonParser, (req, res) => {
-
-  let {username, password, firstName = '', lastName = ''} = req.body;
+console.log(req.body)
+  let {username, password, firstname, lastname} = req.body;
   // Username and password come in pre-trimmed, otherwise we throw an error
   // before this
-  firstName = firstName.trim();
-  lastName = lastName.trim();
+  firstname = firstname.trim();
+  lastname = lastname.trim();
+  username = username.trim();
 
   return User.find({username})
     .count()
@@ -25,31 +26,34 @@ router.post('/', jsonParser, (req, res) => {
         return Promise.reject({
           code: 422,
           reason: 'ValidationError',
-          message: 'Username already taken',
+          message: 'email already taken',
           location: 'username'
         });
       }
       // If there is no existing user, hash the password
       return User.hashPassword(password);
     })
+
     .then(hash => {
       return User.create({
         username,
         password: hash,
-        firstName,
-        lastName
-      });
+        firstname,
+        lastname
+      })
     })
     .then(user => {
+      console.log(`inside ${user}`);
       return res.status(201).json(user.serialize());
     })
     .catch(err => {
+      console.log(err)
       // Forward validation errors on to the client, otherwise give a 500
       // error because something unexpected has happened
       if (err.reason === 'ValidationError') {
         return res.status(err.code).json(err);
       }
-      res.status(500).json({code: 500, message: 'Internal server error'});
+      res.status(500).json({code: 500, message: 'Internal server error yo'});
     });
 });
 

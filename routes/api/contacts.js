@@ -19,7 +19,8 @@ router.get('/', (req, res) => {
 // @access  Public (temporary in dev)
 
 router.post('/', (req, res) => {
-  const requiredFields = ['email', 'name'];
+  const requiredFields = ['username', 'firstname', 'lastname'];
+  console.log("looky here");
   console.log(`from router ${req.body}`);
   for (let i = 0; i < requiredFields.length; i++) {
     const field = requiredFields[i];
@@ -32,8 +33,9 @@ router.post('/', (req, res) => {
 
 console.log(req.body);
     Contact.create({
-      name: req.body.name,
-      email: req.body.email,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname,
+      username: req.body.username,
       img: req.body.img
     })
     .then(contact => {
